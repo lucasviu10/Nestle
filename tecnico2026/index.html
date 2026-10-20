@@ -63,6 +63,9 @@ td.r,th.r{text-align:right}
 tr.me td{background:rgba(240,185,41,.09)}
 tr.click{cursor:pointer}
 tr.click:hover td{background:rgba(255,255,255,.04)}
+.lnk{background:none;border:0;padding:0;color:var(--fg);text-align:left;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.lnk:hover{color:var(--accent);text-decoration-color:var(--accent)}
+input[type=text],input[type=number],input[type=search]{font:inherit;background:var(--panel2);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:6px 8px;max-width:100%}
 .pos{display:inline-block;min-width:36px;text-align:center;font-family:var(--f-display);font-weight:700;font-size:.8rem;padding:1px 5px;border-radius:4px;letter-spacing:.04em}
 .p-GOL{background:#4a3b0c;color:#ffd75e}.p-ZAG{background:#0f3350;color:#8fc8ff}.p-LAT{background:#123b4a;color:#86e0ff}
 .p-VOL{background:#16402a;color:#8ff0b5}.p-MEI{background:#2c3f14;color:#c9f08a}.p-ATA{background:#4d1717;color:#ff9b95}
@@ -200,6 +203,134 @@ const JOGOS=[['toque','Toque de bola','Valoriza a posse. Rende mais com meio-cam
 const LINHAS=[['baixa','Baixa','Protege as costas da defesa. Neutraliza contra-ataque e bola longa, mas recua o time.'],['media','Média','Posição padrão da última linha.'],['alta','Alta','Encurta o campo e ajuda a pressão, mas expõe as costas a lançamentos e contra-ataques.']];
 const TREINOS=[['fisico','Físico','Recupera mais condição entre as rodadas.'],['tatico','Tático','Aumenta o entrosamento no esquema em uso mais rápido.'],['tecnico','Técnico','Acelera a evolução dos jogadores jovens no fim da temporada.']];
 
+/* ================== elencos reais 2026 ==================
+   Nome|Pos|Idade|Força|Características
+   Fontes: listas de elenco publicadas entre jan e set/2026 (O Tempo, Vavel, Placar, ESPN, Sofascore, sites dos clubes).
+   Força e características são estimativas do jogo, não dados oficiais. Idades aproximadas.
+   Códigos: ART artilheiro · VEL veloz · DRI driblador · ARM armador · XER xerife · CAB cabeceio · MOT motorzinho · BOL bola parada · PAR paredão · LID líder */
+const ELENCOS_REAIS={
+fla:`Rossi|GOL|30|83|PAR,LID;Andrew|GOL|25|70|;Dyogo Alves|GOL|22|62|;
+Léo Ortiz|ZAG|30|82|XER;Léo Pereira|ZAG|30|81|CAB;Danilo|ZAG|35|79|LID,XER;
+Guillermo Varela|LAT|33|77|MOT;Emerson Royal|LAT|27|76|VEL;Alex Sandro|LAT|35|76|LID;Ayrton Lucas|LAT|28|75|VEL;
+Erick Pulgar|VOL|32|78|BOL,XER;Jorginho|VOL|34|81|ARM,LID;Saúl Ñíguez|VOL|31|79|ARM;Evertton Araújo|VOL|23|75|MOT;
+Arrascaeta|MEI|32|86|ARM,BOL;Lucas Paquetá|MEI|29|85|DRI,ARM;Nicolás De la Cruz|MEI|29|81|ARM,MOT;Jorge Carrascal|MEI|28|79|DRI;
+Pedro|ATA|29|85|ART,CAB;Samuel Lino|ATA|26|81|VEL,DRI;Bruno Henrique|ATA|35|79|VEL;Gonzalo Plata|ATA|25|78|VEL,DRI;Everton Cebolinha|ATA|30|77|VEL;Luiz Araújo|ATA|30|77|DRI;Wallace Yan|ATA|21|70|VEL;Juninho|ATA|29|72|ART`,
+pal:`Carlos Miguel|GOL|27|81|PAR;Marcelo Lomba|GOL|39|70|LID;Aranha|GOL|25|64|;
+Gustavo Gómez|ZAG|33|82|XER,LID,CAB;Murilo|ZAG|29|79|XER;Bruno Fuchs|ZAG|27|77|;Luiz Benedetti|ZAG|21|72|;
+Agustín Giay|LAT|22|77|VEL;Joaquín Piquerez|LAT|28|79|BOL;Khellven|LAT|24|74|;Jefté|LAT|22|74|VEL;
+Emiliano Martínez|VOL|27|79|MOT;Marlon Freitas|VOL|31|79|ARM,LID;Lucas Evangelista|VOL|31|76|;
+Raphael Veiga|MEI|31|81|BOL,ARM;Andreas Pereira|MEI|30|81|ARM,BOL;Felipe Anderson|MEI|33|79|DRI;
+Vitor Roque|ATA|21|83|ART,VEL;Flaco López|ATA|25|81|ART,CAB;Paulinho|ATA|26|80|DRI;Facundo Torres|ATA|26|79|DRI;Ramón Sosa|ATA|26|78|VEL,DRI;Allan|ATA|22|74|DRI;Luighi|ATA|20|70|;Erick Belé|ATA|20|66|`,
+bot:`Léo Linck|GOL|25|74|;Cristhian Loor|GOL|24|72|;Neto|GOL|37|70|LID;Raul|GOL|29|70|;
+Alexander Barboza|ZAG|31|78|XER;Bastos|ZAG|35|75|CAB;Kaio Pantaleão|ZAG|30|74|;Fernando Marçal|ZAG|37|72|LID;Ythallo|ZAG|22|70|;
+Vitinho|LAT|27|76|VEL;Alex Telles|LAT|33|77|BOL;Mateo Ponte|LAT|22|73|;
+Cristian Medina|VOL|24|78|MOT;Danilo Barbosa|VOL|30|75|XER;Allan|VOL|35|73|LID;Newton|VOL|25|73|;
+Santiago Rodríguez|MEI|26|77|DRI;Álvaro Montoro|MEI|19|76|DRI,ARM;
+Joaquín Correa|ATA|31|78|DRI;Arthur Cabral|ATA|28|77|ART,CAB;Júnior Santos|ATA|31|76|VEL;Chris Ramos|ATA|29|75|CAB;Matheus Martins|ATA|23|74|VEL;Nathan Fernandes|ATA|21|72|;Kadir Barría|ATA|21|70|VEL`,
+cru:`Cássio|GOL|39|77|LID,PAR;Otávio|GOL|23|70|;Léo Aragão|GOL|23|64|;
+Fabrício Bruno|ZAG|30|80|XER,CAB;Jonathan Jesus|ZAG|27|76|;Lucas Villalba|ZAG|31|76|;João Marcelo|ZAG|25|74|;
+Fagner|LAT|37|74|LID;Matías Viña|LAT|28|75|;Gabriel Rojas|LAT|29|74|;Kauã Moraes|LAT|22|72|VEL;
+Lucas Romero|VOL|32|79|MOT,LID;Matheus Henrique|VOL|28|78|ARM;Lucas Silva|VOL|33|76|;Zé Lucas|VOL|19|74|MOT;
+Gerson|MEI|29|83|MOT,ARM;Matheus Pereira|MEI|30|84|ARM,BOL,DRI;Felipe Morais|MEI|20|66|;
+Kaio Jorge|ATA|24|83|ART;Luis Sinisterra|ATA|27|79|VEL,DRI;Wesley|ATA|26|77|VEL;Keny Arroyo|ATA|20|76|VEL,DRI;Gabriel Pec|ATA|25|76|VEL;Wanderson|ATA|32|76|VEL;Lucho Rodríguez|ATA|25|74|;Marquinhos|ATA|27|73|;Bruno Rodrigues|ATA|29|73|;Kaique Kenji|ATA|23|72|;Néiser Villarreal|ATA|20|72|ART`,
+flu:`Fábio|GOL|45|76|PAR,LID;Vitor Eudes|GOL|25|64|;Marcelo Pitaluga|GOL|23|66|;
+Juan Pablo Freytes|ZAG|26|78|XER;Ignácio|ZAG|29|76|;Igor Rabello|ZAG|31|74|CAB;Jemmes|ZAG|31|74|;
+Guilherme Arana|LAT|29|79|VEL,BOL;Guga|LAT|28|75|;Samuel Xavier|LAT|36|73|LID;Renê|LAT|34|72|;
+Martinelli|VOL|25|78|MOT;Hércules|VOL|25|76|MOT;Facundo Bernal|VOL|22|75|;Nonato|VOL|28|75|;Otávio|VOL|31|73|;
+Lucho Acosta|MEI|32|80|DRI,ARM;Jefferson Savarino|MEI|29|79|DRI,BOL;Ganso|MEI|37|75|ARM;Alisson|MEI|26|74|;Rubén Lezcano|MEI|22|70|;
+Kevin Serna|ATA|28|77|VEL;Agustín Canobbio|ATA|27|77|VEL,MOT;Germán Cano|ATA|38|76|ART;John Kennedy|ATA|24|76|ART;Soteldo|ATA|29|76|DRI;Rodrigo Castillo|ATA|25|74|ART;Santi Moreno|ATA|25|72|VEL`,
+cam:`Everson|GOL|35|78|LID;Gabriel Delfim|GOL|25|68|;Pedro Cobra|GOL|20|60|;
+Lyanco|ZAG|29|77|XER;Junior Alonso|ZAG|33|77|LID;Vitão|ZAG|26|75|;Ruan|ZAG|30|75|;Ivan Román|ZAG|22|74|;Vitor Hugo|ZAG|35|74|CAB;
+Renan Lodi|LAT|28|77|BOL;Natanael|LAT|24|74|;Saravia|LAT|32|73|;
+Alan Franco|VOL|27|77|MOT;Fausto Vera|VOL|26|76|;Maycon|VOL|28|76|;Alexsander|VOL|22|74|;
+Gustavo Scarpa|MEI|32|80|BOL,ARM;Bernard|MEI|33|76|DRI;Reinier|MEI|24|75|;Igor Gomes|MEI|27|75|;Iseppe|MEI|21|68|;
+Cuello|ATA|25|81|ART,VEL;Hulk|ATA|39|80|BOL,LID,ART;Alan Minda|ATA|23|76|VEL,DRI;Mateo Cassierra|ATA|29|76|ART,CAB;Dudu|ATA|34|75|DRI;Biel|ATA|25|73|VEL;Cauã Soares|ATA|18|66|`,
+sao:`Rafael|GOL|36|77|LID;Jandrei|GOL|32|68|;Young|GOL|21|62|;
+Robert Arboleda|ZAG|34|77|XER;Rafael Tolói|ZAG|35|76|LID;Ferraresi|ZAG|27|75|;Sabino|ZAG|29|74|;
+Wendell|LAT|33|76|;Enzo Díaz|LAT|26|75|VEL;Lucas Ramon|LAT|32|73|;
+Pablo Maia|VOL|24|77|MOT;Damián Bobadilla|VOL|25|77|MOT;Marcos Antônio|VOL|26|77|ARM;Danielzinho|VOL|21|72|;
+Lucas Moura|MEI|34|79|DRI,LID;Cauly|MEI|31|75|DRI;
+Jonathan Calleri|ATA|33|77|ART,CAB,LID;Luciano|ATA|33|77|ART,BOL;André Silva|ATA|28|74|;Ferreirinha|ATA|28|74|VEL;Gonzalo Tapia|ATA|23|70|;Ryan Francisco|ATA|19|70|ART`,
+int:`Sergio Rochet|GOL|33|79|PAR;Anthoni|GOL|24|70|;Kauan|GOL|19|60|;
+Guillermo Maripán|ZAG|32|77|XER;Félix Torres|ZAG|29|76|;Gabriel Mercado|ZAG|39|73|LID,CAB;Juninho|ZAG|27|72|;
+Alexandro Bernabei|LAT|26|77|VEL,BOL;Braian Aguirre|LAT|26|74|;Matheus Bahia|LAT|26|72|;
+Thiago Maia|VOL|29|75|;Bruno Henrique|VOL|36|74|;Fernando|VOL|39|73|LID;Ronaldo|VOL|29|72|;
+Alan Patrick|MEI|35|78|ARM,BOL;Óscar Romero|MEI|33|75|BOL;Bruno Tabata|MEI|29|74|DRI;Gustavo Prado|MEI|20|70|;
+Rafael Borré|ATA|31|77|ART;Johan Carbonero|ATA|26|75|VEL,DRI;Vitinho|ATA|27|75|VEL;Alerrandro|ATA|26|75|ART,CAB;Enner Valencia|ATA|37|72|ART;Ricardo Mathias|ATA|21|68|`,
+cor:`Hugo Souza|GOL|27|80|PAR;Matheus Donelli|GOL|24|70|;Felipe Longo|GOL|25|66|;
+Gustavo Henrique|ZAG|33|76|CAB;André Ramalho|ZAG|34|75|;Gabriel Paulista|ZAG|35|74|XER;Cacá|ZAG|27|73|;
+Matheuzinho|LAT|26|76|VEL;Matheus Bidu|LAT|27|74|;Fabrizio Angileri|LAT|32|73|;Pedro Milans|LAT|24|72|;Hugo|LAT|28|71|;
+Breno Bidon|VOL|21|75|ARM;Raniele|VOL|29|75|MOT;Charles|VOL|30|73|;André|VOL|19|72|;
+Rodrigo Garro|MEI|28|79|ARM,BOL;André Carrillo|MEI|35|75|DRI;Dieguinho|MEI|21|70|;Ryan|MEI|20|68|;
+Memphis Depay|ATA|32|82|ART,DRI,BOL;Yuri Alberto|ATA|25|78|ART,VEL;Pedro Raul|ATA|29|75|CAB;Talles Magno|ATA|24|73|VEL;Vitinho|ATA|22|70|;Kayke|ATA|21|68|;Gui Negão|ATA|19|68|`,
+bah:`Marcos Felipe|GOL|29|76|;Guido Herrera|GOL|34|76|PAR;Ronaldo|GOL|29|72|;Léo Vieira|GOL|26|68|;
+Gabriel Xavier|ZAG|27|75|;Santiago Ramos Mingo|ZAG|26|74|;Kanu|ZAG|28|74|CAB;David Duarte|ZAG|30|74|;
+Luciano Juba|LAT|26|77|BOL,VEL;Santiago Arias|LAT|34|74|LID;Gilberto|LAT|33|74|;Iago Borduchi|LAT|27|70|;
+Jean Lucas|VOL|28|78|MOT;Caio Alexandre|VOL|27|77|ARM;Nicolás Acevedo|VOL|33|76|XER;Rezende|VOL|31|73|;
+Everton Ribeiro|MEI|37|77|ARM,LID;Rodrigo Nestor|MEI|25|75|;Michel Araújo|MEI|29|75|BOL;
+Erick Pulga|ATA|24|76|DRI,VEL;Willian José|ATA|34|76|ART,CAB;Ademir|ATA|30|75|VEL;Kayky|ATA|23|74|DRI;Everaldo|ATA|34|72|CAB;Tiago|ATA|24|72|`,
+gre:`Gabriel Grando|GOL|25|72|;Brenno|GOL|26|70|;Adriel|GOL|25|68|;
+Walter Kannemann|ZAG|35|76|XER,LID;Fabián Balbuena|ZAG|34|75|XER;Wagner Leonardo|ZAG|26|74|;Rodrigo Ely|ZAG|32|74|;Gustavo Martins|ZAG|21|72|;
+Caio Paulista|LAT|28|74|VEL;João Pedro|LAT|28|72|;Marlon|LAT|29|72|;
+Mathías Villasanti|VOL|29|78|MOT,XER;Arthur|VOL|30|77|ARM;Dodi|VOL|30|75|MOT;Camilo|VOL|27|73|;
+Franco Cristaldo|MEI|33|77|BOL,ARM;Miguel Monsalve|MEI|22|75|DRI;Edenílson|MEI|36|72|;
+Martin Braithwaite|ATA|35|77|ART;Carlos Vinícius|ATA|31|76|ART,CAB;Amuzu|ATA|26|75|VEL,DRI;Cristian Pavón|ATA|30|75|VEL;Tetê|ATA|26|74|DRI;Enamorado|ATA|26|74|VEL;Aravena|ATA|22|74|;Alysson|ATA|20|72|VEL;André Henrique|ATA|21|71|`,
+rbb:`Cleiton|GOL|28|76|PAR;Tiago Volpi|GOL|35|75|LID;Fabrício|GOL|25|64|;
+Pedro Henrique|ZAG|31|75|;Guzmán Rodríguez|ZAG|26|75|XER;Gustavo Marques|ZAG|22|74|;Alix Vinicius|ZAG|24|73|;Eduardo|ZAG|29|73|;
+Juninho Capixaba|LAT|29|75|BOL;Agustín Sant'Anna|LAT|28|74|;José Hurtado|LAT|31|73|;Vanderlan|LAT|23|72|VEL;
+Matheus Fernandes|VOL|28|75|MOT;Eric Ramires|VOL|26|74|;Gabriel|VOL|24|74|;Ignacio Sosa|VOL|25|73|;Praxedes|VOL|24|72|;Fabinho|VOL|27|72|;
+Nacho Laquintana|MEI|27|75|DRI;Rodriguinho|MEI|22|75|DRI;Gustavo Neves|MEI|22|72|;
+Isidro Pitta|ATA|27|76|ART,CAB;Eduardo Sasha|ATA|34|74|ART;Henry Mosquera|ATA|23|74|VEL;Lucas Barbosa|ATA|25|73|;Vinicinho|ATA|23|72|VEL;Kevyn Monteiro|ATA|22|70|;Davi Gomes|ATA|20|68|`,
+vas:`Léo Jardim|GOL|31|80|PAR;Daniel Fuzato|GOL|29|70|;Pablo|GOL|22|66|;
+Robert Renan|ZAG|22|76|;Carlos Cuesta|ZAG|27|75|XER;Alan Saldivia|ZAG|26|73|;Lucas Freitas|ZAG|25|72|;
+Lucas Piton|LAT|25|76|BOL,VEL;Puma Rodríguez|LAT|28|74|;Paulo Henrique|LAT|29|73|;Cuiabano|LAT|23|73|VEL;
+Thiago Mendes|VOL|34|75|LID;Tchê Tchê|VOL|33|74|MOT;Hugo Moura|VOL|28|74|;Jair|VOL|31|74|;Cauan Barros|VOL|20|72|;
+Johan Rojas|MEI|23|75|DRI;Mateus Carvalho|MEI|24|71|;Guilherme Estrella|MEI|20|70|;Lukas Zuccarello|MEI|23|68|;
+Andrés Gómez|ATA|23|77|VEL,DRI;Nuno Moreira|ATA|27|77|DRI;Brenner|ATA|26|75|ART;David|ATA|30|75|VEL;Claudio Spinelli|ATA|29|74|ART,CAB;Marino Hinestroza|ATA|23|74|VEL;Adson|ATA|25|73|DRI;Loide Augusto|ATA|26|70|`,
+san:`Gabriel Brazão|GOL|25|77|PAR;João Paulo|GOL|30|72|;Diógenes|GOL|25|66|;Rodrigo Falcão|GOL|21|62|;
+Lucas Veríssimo|ZAG|31|76|XER;Luan Peres|ZAG|31|75|;Adonis Frías|ZAG|28|75|;Alexis Duarte|ZAG|25|74|;João Basso|ZAG|28|74|CAB;
+Gonzalo Escobar|LAT|28|74|;Igor Vinícius|LAT|29|73|;Mayke|LAT|33|72|;JP Chermont|LAT|20|70|;
+Willian Arão|VOL|34|75|LID;Christian Oliva|VOL|30|74|MOT;Gabriel Menino|VOL|25|74|;João Schmidt|VOL|33|74|ARM;Tomás Rincón|VOL|38|72|LID;
+Neymar|MEI|34|84|DRI,ARM,BOL;Thaciano|MEI|31|75|;Miguelito|MEI|21|72|DRI;Gabriel Bontempo|MEI|20|70|;
+Gabriel Barbosa|ATA|30|77|ART;Álvaro Barreal|ATA|26|76|VEL;Rony|ATA|31|76|VEL,MOT;Moisés|ATA|30|75|VEL;Robinho Júnior|ATA|19|72|DRI;Tiquinho Soares|ATA|35|72|ART,CAB`,
+mir:`Walter|GOL|38|74|LID;Alex Muralha|GOL|36|70|;Thomazella|GOL|30|66|;
+João Victor|ZAG|27|73|XER;Willian Machado|ZAG|27|72|;Lucas Oliveira|ZAG|34|71|CAB;Elias|ZAG|25|68|;
+Reinaldo|LAT|36|74|BOL;Victor Luis|LAT|32|72|;Daniel Borges|LAT|32|71|;Igor Formiga|LAT|22|70|VEL;Gabriel Knesowitsch|LAT|23|68|;
+Neto Moura|VOL|30|74|MOT;José Aldo|VOL|30|73|;Denilson|VOL|25|70|;Gustavo Cazonatti|VOL|25|70|;
+Chico Kim|MEI|22|72|DRI;Shaylon|MEI|28|72|BOL;Eduardo|MEI|33|71|ARM;Japa|MEI|26|70|;
+Negueba|ATA|33|73|VEL;Alesson|ATA|27|73|VEL;André Luis|ATA|30|72|ART;Edson Carioca|ATA|27|72|;Fernandinho|ATA|30|72|DRI;Zé Roberto|ATA|31|71|ART;Carlos Eduardo|ATA|24|70|`,
+cap:`Mycael|GOL|22|74|PAR;Matheus Soares|GOL|26|70|;Carlos Eduardo|GOL|24|66|;
+Arthur Dias|ZAG|26|74|XER;Lucas Belezi|ZAG|24|73|;Habraão|ZAG|31|72|CAB;Gamarra|ZAG|26|72|;
+Lucas Esquivel|LAT|28|74|BOL;Benavídez|LAT|25|72|VEL;Léo Godoy|LAT|30|72|;
+Luiz Gustavo|VOL|39|76|LID,XER;Felipinho|VOL|21|72|MOT;Raul|VOL|26|71|;
+Bruno Zapelli|MEI|24|77|ARM,DRI;Alejandro García|MEI|24|74|;Bruninho|MEI|18|70|DRI;
+Kevin Viveros|ATA|27|80|ART,CAB;Léo Derik|ATA|22|72|VEL;Julimar|ATA|26|72|;Stiven Mendoza|ATA|33|72|VEL`,
+vit:`Lucas Arcanjo|GOL|27|75|PAR;Gabriel Yuri|GOL|24|66|;Alexandre Fintelman|GOL|22|64|;
+Camutanga|ZAG|31|73|XER;Riccieli|ZAG|28|72|;Emanuel Brítez|ZAG|24|72|;
+Luan Cândido|LAT|25|73|;Jamerson|LAT|27|72|VEL;Ramon|LAT|25|72|;Mateusinho|LAT|29|72|;Nathan Mendes|LAT|23|71|;
+Tomás Pochettino|VOL|29|74|ARM;Baralhas|VOL|25|73|MOT;Caíque Gonçalves|VOL|23|71|;Zé Vitor|VOL|24|70|;
+Matheuzinho|MEI|25|74|DRI;Emmanuel Martínez|MEI|26|73|;
+Renato Kayzer|ATA|30|75|ART;Erick|ATA|28|74|DRI;Marinho|ATA|36|72|DRI,BOL;Diego Tarzia|ATA|26|72|VEL;Osvaldo|ATA|38|70|VEL;Fabri|ATA|20|68|;Renê Sousa|ATA|22|68|`,
+cfc:`Pedro Morisco|GOL|22|74|PAR;Gabriel Leite|GOL|27|70|;Benassi|GOL|29|68|;
+Maicon|ZAG|36|74|XER,LID;Tiago Coser|ZAG|29|72|;Jacy|ZAG|30|71|CAB;
+Bruno Melo|LAT|34|70|;Felipe Guimarães|LAT|25|70|;
+Josué|VOL|36|74|ARM,LID;Sebastián Gómez|VOL|26|73|MOT;Vini Paulista|VOL|26|70|;
+Pedro Rocha|ATA|31|75|ART;Clayson|ATA|31|72|DRI;Iury Castilho|ATA|30|72|;Gustavo Coutinho|ATA|28|72|ART;Keno|ATA|37|71|DRI`,
+cha:`Rafael Santos|GOL|28|70|;Anderson Paixão|GOL|33|69|;Gabriel Werner|GOL|22|64|;
+Rafael Thyere|ZAG|32|72|CAB,LID;Victor Caetano|ZAG|23|70|;Bruno Leonardo|ZAG|30|69|;Eduardo Doma|ZAG|25|68|;Mancha|ZAG|24|68|;
+Bruno Pacheco|LAT|34|70|;Walter Clar|LAT|31|70|;Iago Gnoatto|LAT|22|66|;
+Bruno Matias|VOL|26|70|MOT;Marlon|VOL|28|70|;Jean|VOL|27|70|;
+Giovanni Augusto|MEI|36|72|ARM,BOL;Marcinho|MEI|30|71|DRI;Jorge Roa|MEI|25|70|;Leo Vieira|MEI|26|70|;
+Perotti|ATA|30|72|ART;Yannick Bolasie|ATA|37|72|DRI;Rubens|ATA|25|70|VEL;Túlio Eduardo|ATA|23|68|`,
+rem:`Marcelo Rangel|GOL|37|72|LID;Ivan|GOL|29|70|;Ygor Vinhas|GOL|26|66|;
+Marllon|ZAG|34|72|CAB;Klaus|ZAG|32|71|;Léo Andrade|ZAG|26|70|;Kayky|ZAG|22|68|;
+Marcelinho|LAT|30|71|;Jorge|LAT|30|71|;Matheus Alexandre|LAT|26|70|;Cristian Tassano|LAT|25|69|;Sávio|LAT|24|68|;
+Leonel Picco|VOL|28|71|MOT;Eduardo|VOL|27|69|;
+Yago Pikachu|MEI|34|73|BOL,VEL;Vitor Bueno|MEI|31|72|DRI;João Pedro|MEI|26|70|;Jajá|MEI|26|70|DRI;
+Alef Manga|ATA|31|72|VEL;Gabriel Taliari|ATA|26|71|ART;Rafael Monti|ATA|26|70|`,
+};
+const CARAC={ART:['Artilheiro','Finaliza melhor e chuta mais'],VEL:['Veloz','Rende mais no contra-ataque'],DRI:['Driblador','Ajuda o toque de bola a furar a defesa'],ARM:['Armador','Dá mais assistências e melhora o meio'],XER:['Xerife','Reforça a defesa'],CAB:['Cabeceio','Rende mais na bola longa'],MOT:['Motorzinho','Cansa menos, bom para pressão alta'],BOL:['Bola parada','Pode decidir em cobrança de falta'],PAR:['Paredão','Goleiro que defende mais'],LID:['Líder','Segura o time emocionalmente']};
+
 /* ================== jogadores ================== */
 let S=null; // estado global
 function nomeAleatorio(){return pick(NOMES)+' '+pick(SOBRENOMES)}
@@ -210,15 +341,41 @@ function valorJog(p){
   return Math.round(base*f*pot/10)*10;
 }
 function salarioJog(p){return Math.round((Math.pow(Math.max(1,p.ovr-38),2.4)*0.066+25))}
-function novoJogador(pos,ovr,idade,clube){
-  const p={id:'j'+(S.seq++),nome:nomeAleatorio(),pos,idade,ovr:clamp(ovr,35,93),pot:0,cond:100,moral:70,lesao:0,lesaoNova:0,susp:0,suspNova:0,amarelos:0,jogos:0,gols:0,assist:0,clube};
-  p.pot=clamp(idade<=23?p.ovr+ri(2,18):p.ovr,35,95);
+function novoJogador(pos,ovr,idade,clube,nome,car){
+  const p={id:'j'+(S.seq++),nome:nome||nomeAleatorio(),pos,idade,ovr:clamp(ovr,35,93),pot:0,cond:100,moral:70,lesao:0,lesaoNova:0,susp:0,suspNova:0,amarelos:0,jogos:0,gols:0,assist:0,clube,real:!!nome};
+  p.pot=clamp(idade<=23?p.ovr+ri(2,idade<=20?16:10):p.ovr,35,95);
+  p.car=car||caracAleatorias(pos);
+  gerarAtributos(p);
   p.salario=salarioJog(p);
   S.jog[p.id]=p;return p;
+}
+function caracAleatorias(pos){
+  const op={GOL:['PAR'],ZAG:['XER','CAB'],LAT:['VEL','BOL','MOT'],VOL:['MOT','XER','ARM'],MEI:['ARM','DRI','BOL'],ATA:['ART','VEL','DRI','CAB']}[pos];
+  return rnd()<0.35?[pick(op)]:[];
+}
+// atributos derivados da força, posição e características; ruído fixo pelo nome
+function hashNome(t){let h=2166136261;for(const ch of t){h^=ch.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
+const PERFIL={ZAG:{vel:-6,fin:-25,pas:-8,dri:-15,mar:6,fis:5},LAT:{vel:5,fin:-15,pas:0,dri:-2,mar:-2,fis:2},VOL:{vel:-4,fin:-12,pas:3,dri:-6,mar:5,fis:4},MEI:{vel:0,fin:-2,pas:7,dri:5,mar:-12,fis:-4},ATA:{vel:4,fin:7,pas:-5,dri:3,mar:-25,fis:0},GOL:{ref:3,col:1,pes:-8,sai:-3}};
+const BONUS={VEL:{vel:10},ART:{fin:9},DRI:{dri:9},ARM:{pas:9},XER:{mar:7,fis:3},CAB:{fis:6},MOT:{fis:8},BOL:{fin:3,pas:3},PAR:{ref:6,col:3}};
+const ATR_NOME={vel:'Velocidade',fin:'Finalização',pas:'Passe',dri:'Drible',mar:'Marcação',fis:'Físico',ref:'Reflexo',col:'Colocação',pes:'Jogo com os pés',sai:'Saída do gol'};
+function gerarAtributos(p){
+  let h=hashNome(p.nome+p.pos);const at={};const pf=PERFIL[p.pos];
+  for(const k in pf){h=Math.imul(h^(h>>>15),2246822507)>>>0;const ruido=(h%9)-4;let v=p.ovr+pf[k]+ruido;for(const c of p.car||[])if(BONUS[c]&&BONUS[c][k])v+=BONUS[c][k];if(k==='vel'&&p.idade>31)v-=(p.idade-31)*2;at[k]=clamp(Math.round(v),20,99)}
+  p.at=at;
 }
 function gerarElenco(c){
   const cont={GOL:[1,2],ZAG:[2,3],LAT:[2,2],VOL:[2,2],MEI:[3,2],ATA:[2,3]};
   c.elenco=[];
+  if(ELENCOS_REAIS[c.id]){
+    for(const ln of ELENCOS_REAIS[c.id].split(';')){const [nome,pos,id,ov,car]=ln.trim().split('|');if(!nome)continue;
+      const p=novoJogador(pos,+ov,+id,c.id,nome,car?car.split(','):[]);c.elenco.push(p.id)}
+    // completa com garotos da base se a lista real for curta
+    const minimo={GOL:3,ZAG:4,LAT:4,VOL:3,MEI:3,ATA:4};const base=Math.round(c.elenco.reduce((s,j)=>s+S.jog[j].ovr,0)/c.elenco.length)-10;
+    for(const pos of POS){let n=c.elenco.filter(j=>S.jog[j].pos===pos).length;while(n<minimo[pos]){const p=novoJogador(pos,base+ri(-3,3),ri(17,19),c.id);p.base=true;c.elenco.push(p.id);n++}}
+    while(c.elenco.length<23){const p=novoJogador(pick(['ZAG','VOL','MEI','ATA']),base+ri(-3,3),ri(17,19),c.id);p.base=true;c.elenco.push(p.id)}
+    const top=c.elenco.map(j=>S.jog[j].ovr).sort((a,b)=>b-a).slice(0,14);c.forca=Math.round(top.reduce((a,b)=>a+b,0)/top.length);
+    return;
+  }
   for(const pos of POS){
     const [tit,res]=cont[pos];
     for(let i=0;i<tit+res;i++){
@@ -233,7 +390,7 @@ function gerarElenco(c){
 
 /* ================== jogo novo ================== */
 function novoJogo(clubeId){
-  S={v:1,seq:1,ano:2026,rodada:1,jog:{},clubes:{},serieA:[],serieB:[],clube:clubeId,tela:'jogo',aba:'elenco',ui:{},log:[],historico:[]};
+  S={v:2,seq:1,ano:2026,rodada:1,jog:{},clubes:{},serieA:[],serieB:[],clube:clubeId,tela:'jogo',aba:'elenco',ui:{},log:[],historico:[]};
   for(const [arr,div] of [[CLUBES_A,'A'],[CLUBES_B,'B']])for(const c of arr){
     const o={id:c[0],nome:c[1],sigla:c[2],cor1:c[3],cor2:c[4],forca:c[5],torcida:c[6],cap:c[7],div};
     S.clubes[o.id]=o;gerarElenco(o);(div==='A'?S.serieA:S.serieB).push(o.id);
@@ -263,10 +420,16 @@ function iniciarTemporada(){
   for(const id in S.jog){const p=S.jog[id];p.jogos=0;p.gols=0;p.assist=0;p.amarelos=0}
   S.ia={};
   const forms=['4-4-2','4-3-3','4-2-3-1','4-2-3-1','4-1-4-1','3-5-2','5-3-2','4-4-2','3-4-3'];
-  for(const id of S.serieA)S.ia[id]={formacao:pick(forms),jogo:pick(['toque','contra','longa','toque']),marcacao:ri(0,2),linha:pick(['baixa','media','media','alta'])};
+  for(const id of S.serieA)S.ia[id]={formacao:melhorFormacao(id,forms),jogo:pick(['toque','contra','longa','toque']),marcacao:ri(0,2),linha:pick(['baixa','media','media','alta'])};
   // expectativa da diretoria: ranking de força
   const rk=S.serieA.slice().sort((a,b)=>forcaMedia(b)-forcaMedia(a));
   S.meta={};rk.forEach((id,i)=>S.meta[id]=i+1);
+}
+// IA escolhe, entre esquemas sorteados, o que melhor encaixa no elenco
+function melhorFormacao(cid,forms){
+  let best=null,bv=-1;
+  for(const f of shuffle(forms.slice()).slice(0,4)){const esc=melhorEscalacao(cid,f);const F=forca({t:[cid,cid],lados:[{cid,tat:{formacao:f,estilo:0,marcacao:1,jogo:'toque',linha:'media'},esc}]},0);const v=F.def+F.mid+F.att;if(v>bv){bv=v;best=f}}
+  return best;
 }
 function forcaMedia(id){
   const ovrs=S.clubes[id].elenco.map(j=>S.jog[j].ovr).sort((a,b)=>b-a).slice(0,14);
@@ -342,9 +505,13 @@ function novaPartida(h,a){
 function tatLado(M,i){return M.lados[i].tat||S.tatica}
 function forca(M,i){
   const L=M.lados[i],tat=tatLado(M,i),slots=FORMACOES[tat.formacao];
-  const s=[0,0,0];
-  L.esc.forEach((id,k)=>{if(!id)return;const p=S.jog[id];const sl=slots[k]?slots[k][0]:p.pos;const e=efetivo(p,sl);const w=PESO[sl];for(let x=0;x<3;x++)s[x]+=e*w[x]});
+  const s=[0,0,0];const tr={XER:0,ARM:0,CAB:0,DRI:0,LID:0};let vel=0,nv=0,pas=0,np=0;
+  L.esc.forEach((id,k)=>{if(!id)return;const p=S.jog[id];const sl=slots[k]?slots[k][0]:p.pos;const e=efetivo(p,sl);const w=PESO[sl];for(let x=0;x<3;x++)s[x]+=e*w[x];
+    for(const c of p.car||[])if(c in tr)tr[c]++;
+    if(p.at&&sl!=='GOL'&&sl!=='ZAG'){vel+=p.at.vel;nv++}if(p.at&&(sl==='VOL'||sl==='MEI')){pas+=p.at.pas;np++}});
   let def=s[0]/BASE[0],mid=s[1]/BASE[1],att=s[2]/BASE[2];
+  def*=1+0.015*Math.min(3,tr.XER);mid*=1+0.01*Math.min(3,tr.ARM);
+  if(tr.LID){def*=1.01;mid*=1.01;att*=1.01}
   const e=tat.estilo,m=tat.marcacao;
   att*=1+0.08*e;def*=1-0.06*e;
   mid*=1+0.045*(m-1);
@@ -352,18 +519,23 @@ function forca(M,i){
   if(tat.jogo==='longa'){mid*=0.96;att*=1.03}
   if(tat.linha==='alta')mid*=1.04;
   if(tat.linha==='baixa'){def*=1.05;mid*=0.97}
-  const ent=L.cid===S.clube?(S.entros[tat.formacao]||40):70;
+  const ent=L.cid===S.clube&&S.entros?(S.entros[tat.formacao]||40):70;
   const fe=0.94+0.08*ent/100;def*=fe;mid*=fe;att*=fe;
   const d=(L.dia||1)*(i===0?1.04:1);def*=d;mid*=d;att*=d;
   const freq=1+0.09*e+(tat.jogo==='contra'?-0.12:0)+(tat.jogo==='longa'?0.04:0);
   const fadiga=1+0.25*(m-1)+0.05*e;
-  return {def,mid,att,freq,fadiga,tat};
+  return {def,mid,att,freq,fadiga,tat,vel:nv?vel/nv:70,pas:np?pas/np:70,cab:tr.CAB,dri:tr.DRI};
 }
 function nomeCurto(id){return S.jog[id]?S.jog[id].nome:'?'}
 function addEv(M,tipo,txt,lado){M.ev.push({m:M.min>90?'90+'+(M.min-90):M.min>45&&!M.seg?'45+'+(M.min-45):M.min,tipo,txt,lado})}
-function escolherJogador(M,i,pesos){
+function escolherFinalizador(M,i){
+  const L=M.lados[i],slots=FORMACOES[tatLado(M,i).formacao];const c=[];let tot=0;const pw={ATA:3.2,MEI:2.3,VOL:1,LAT:0.8,ZAG:0.8};
+  L.esc.forEach((id,k)=>{if(!id)return;const p=S.jog[id];const f=p.at&&p.at.fin?p.at.fin:40;const w=(pw[slots[k][0]]||0)*f*(p.car.includes('ART')?1.25:1);if(w>0){c.push([id,w]);tot+=w}});
+  let r=rnd()*tot;for(const [id,w] of c){r-=w;if(r<=0)return id}return c.length?c[c.length-1][0]:null;
+}
+function escolherJogador(M,i,pesos,carac){
   const L=M.lados[i],slots=FORMACOES[tatLado(M,i).formacao];const c=[];let tot=0;
-  L.esc.forEach((id,k)=>{if(!id)return;const w=(pesos[slots[k][0]]||0)*S.jog[id].ovr;if(w>0){c.push([id,w]);tot+=w}});
+  L.esc.forEach((id,k)=>{if(!id)return;const p=S.jog[id];const w=(pesos[slots[k][0]]||0)*p.ovr*(carac&&p.car&&p.car.includes(carac)?2:1);if(w>0){c.push([id,w]);tot+=w}});
   let r=rnd()*tot;for(const [id,w] of c){r-=w;if(r<=0)return id}return c.length?c[c.length-1][0]:null;
 }
 function passo(M){
@@ -379,6 +551,9 @@ function passo(M){
     // IA ajusta durante o jogo
     if(M.lados[i].tat)iaAjuste(M,i);
     if(rnd()<0.105*Math.pow(sh*2,0.9)*F[i].freq)lance(M,i,o,F);
+    // falta perigosa com cobrador de bola parada em campo
+    if(rnd()<0.0018){const cob=M.lados[i].esc.filter(id=>id&&S.jog[id].car.includes('BOL')).map(id=>S.jog[id]).sort((a,b)=>(b.at.fin+b.at.pas)-(a.at.fin+a.at.pas))[0];
+      if(cob){M.chutes[i]++;if(rnd()<0.12+0.25*(cob.at.fin-60)/40){M.noAlvo[i]++;M.g[i]++;cob.gols++;addEv(M,'gol','GOL DE FALTA! '+cob.nome+' coloca no ângulo. '+S.clubes[M.t[0]].sigla+' '+M.g[0]+' x '+M.g[1]+' '+S.clubes[M.t[1]].sigla,i)}else addEv(M,'lance','Falta perigosa: '+cob.nome+' cobra e a bola passa raspando.',i)}}
     // cartões
     if(rnd()<0.011*(1+0.45*(F[i].tat.marcacao-1))){
       const id=escolherJogador(M,i,{ZAG:3,VOL:3,LAT:2,MEI:1.2,ATA:0.8,GOL:0.2});
@@ -393,7 +568,7 @@ function passo(M){
     if(rnd()<0.0013){const id=escolherJogador(M,i,{GOL:.3,ZAG:1,LAT:1,VOL:1,MEI:1,ATA:1});if(id){const p=S.jog[id];p.lesaoNova=Math.max(p.lesaoNova,ri(1,6));addEv(M,'info',p.nome+' sente lesão e pede atendimento.',i);
       if(M.lados[i].tat||i!==M.u)subIA(M,i,id,true);else M.alerta='Jogador lesionado: '+p.nome+'. Faça a substituição.'}}
     // desgaste
-    for(const id of M.lados[i].esc){if(!id)continue;const p=S.jog[id];p.cond=Math.max(5,p.cond-0.14*F[i].fadiga*(p.idade>31?1.15:1)*(p.lesaoNova?2:1))}
+    for(const id of M.lados[i].esc){if(!id)continue;const p=S.jog[id];p.cond=Math.max(5,p.cond-0.14*F[i].fadiga*(p.idade>31?1.15:1)*(p.lesaoNova?2:1)*(p.car&&p.car.includes('MOT')?0.7:1))}
   }
   if(M.seg&&M.min>=M.fim){M.fim_=true;addEv(M,'info','Fim de jogo: '+S.clubes[M.t[0]].nome+' '+M.g[0]+' x '+M.g[1]+' '+S.clubes[M.t[1]].nome+'.')}
 }
@@ -404,14 +579,20 @@ function lance(M,i,o,F){
   if(ti.jogo==='longa'){if(to.linha==='alta')q*=1.07;if(to.linha==='baixa')q*=0.93}
   if(ti.jogo==='toque'&&F[i].mid>F[o].mid*1.03)q*=1.04;
   if(to.linha==='baixa'&&ti.jogo==='contra')q*=0.94;
-  const g=0.13*Math.pow(q/0.5,1.6);
+  if(ti.jogo==='contra')q*=1+(F[i].vel-70)/200;
+  if(ti.jogo==='toque')q*=1+(F[i].pas-70)/250+0.01*Math.min(3,F[i].dri);
+  if(ti.jogo==='longa')q*=1+0.025*Math.min(3,F[i].cab);
   M.chutes[i]++;
   const sig=S.clubes[M.lados[i].cid].sigla;
-  const autor=escolherJogador(M,i,{ATA:5,MEI:2.6,VOL:0.8,LAT:0.8,ZAG:0.6});
+  const autor=escolherFinalizador(M,i);
   if(!autor)return;
+  const pa=S.jog[autor],fin=pa.at?pa.at.fin:60;
+  let g=0.12*Math.pow(q/0.5,1.6)*clamp(0.75+0.5*(fin-50)/50,0.6,1.3)*(pa.car.includes('ART')?1.08:1);
+  const gk=S.jog[M.lados[o].esc[0]];
+  if(gk&&gk.at&&gk.at.ref)g*=clamp(1.2-0.4*(gk.at.ref-50)/50,0.75,1.3)*(gk.car.includes('PAR')?0.93:1);else if(!gk||gk.pos!=='GOL')g*=1.35;
   if(rnd()<g){
     M.noAlvo[i]++;M.g[i]++;S.jog[autor].gols++;
-    let ass=null;if(rnd()<0.72){ass=escolherJogador(M,i,{MEI:4,LAT:2,ATA:2,VOL:1.5,ZAG:.4});if(ass===autor)ass=null;if(ass)S.jog[ass].assist++}
+    let ass=null;if(rnd()<0.72){ass=escolherJogador(M,i,{MEI:4,LAT:2,ATA:2,VOL:1.5,ZAG:.4},'ARM');if(ass===autor)ass=null;if(ass)S.jog[ass].assist++}
     const forma=pick(['de cabeça','de pé direito','de pé esquerdo','de fora da área','de primeira','no rebote','cara a cara com o goleiro']);
     addEv(M,'gol','GOL DO '+S.clubes[M.lados[i].cid].nome.toUpperCase()+'! '+nomeCurto(autor)+' marca '+forma+(ass?', passe de '+nomeCurto(ass):'')+'. '+S.clubes[M.t[0]].sigla+' '+M.g[0]+' x '+M.g[1]+' '+S.clubes[M.t[1]].sigla,i);
   }else{
@@ -550,7 +731,7 @@ function encerrarTemporada(){
     else if(p.idade<=29)p.ovr+=ri(-1,2);
     else if(p.idade<=32)p.ovr-=ri(0,2);
     else p.ovr-=ri(1,4);
-    p.ovr=clamp(p.ovr,35,93);p.idade++;p.salario=Math.max(p.salario,salarioJog(p));p.cond=100;p.lesao=0;p.susp=0;p.moral=70;
+    p.ovr=clamp(p.ovr,35,93);p.idade++;gerarAtributos(p);p.salario=Math.max(p.salario,salarioJog(p));p.cond=100;p.lesao=0;p.susp=0;p.moral=70;
   }
   // aposentadorias e reposição nos clubes da IA
   for(const cid in S.clubes){
@@ -637,7 +818,7 @@ function peneira(){
 
 /* ================== salvar ================== */
 function salvar(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(S))}catch(e){}}
-function carregar(){try{const t=localStorage.getItem(SAVE_KEY);if(t){const o=JSON.parse(t);if(o&&o.v===1)return o}}catch(e){}return null}
+function carregar(){try{const t=localStorage.getItem(SAVE_KEY);if(t){const o=JSON.parse(t);if(o&&o.v===2)return o}}catch(e){}return null}
 let toastT=null;
 function toast(t){let el=$('#toast');if(!el){el=document.createElement('div');el.id='toast';el.className='toast';el.setAttribute('role','status');document.body.appendChild(el)}el.textContent=t;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>el.hidden=true,3200)}
 
@@ -657,15 +838,16 @@ function render(){
   if(S.tela==='demitido'){app.innerHTML=telaDemitido();return}
   app.innerHTML=barraClube()+abas()+`<div id="conteudo">${conteudoAba()}</div>`;
 }
+function forcaReal(id){const t=ELENCOS_REAIS[id];if(!t)return 70;const o=t.split(';').map(l=>+l.split('|')[3]).filter(Boolean).sort((a,b)=>b-a).slice(0,14);return o.reduce((a,b)=>a+b,0)/o.length}
 function telaInicio(){
   const lista=CLUBES_A.slice().sort((a,b)=>a[1].localeCompare(b[1]));
   return `<section class="hero stack">
     <h1>Técnico <em>2026</em></h1>
     <p class="muted" style="max-width:62ch">Gerenciador de futebol no estilo clássico. Escolha um clube da Série A, monte o esquema, defina a estratégia, mexa no time durante o jogo e cuide do caixa. 38 rodadas, rebaixamento e diretoria cobrando resultado.</p>
-    <p class="muted" style="font-size:.85rem">Clubes da Série A 2026. Os jogadores são fictícios e gerados a cada jogo novo.</p>
+    <p class="muted" style="font-size:.85rem;max-width:70ch">Elencos reais da Série A 2026, montados a partir de listas publicadas entre janeiro e setembro. Força e características são estimativas do jogo. Algum nome desatualizado? Clique no jogador e use Editar. Clubes da Série B usam jogadores fictícios.</p>
   </section>
   <div class="panel stack"><h3>Escolha seu clube</h3>
-  <div class="pick-club">${lista.map(c=>`<button data-a="escolher" data-id="${c[0]}"><span class="badge sm" style="background:${c[3]};color:${c[4]};border-color:${c[4]}">${c[2]}</span><span><b>${c[1]}</b><br><span class="muted" style="font-size:.8rem">Força ${'★'.repeat(c[5]>=78?5:c[5]>=74?4:c[5]>=70?3:c[5]>=67?2:1)}</span></span></button>`).join('')}</div></div>`;
+  <div class="pick-club">${lista.map(c=>`<button data-a="escolher" data-id="${c[0]}"><span class="badge sm" style="background:${c[3]};color:${c[4]};border-color:${c[4]}">${c[2]}</span><span><b>${c[1]}</b><br><span class="muted" style="font-size:.8rem">Força ${(f=>'★'.repeat(f>=80?5:f>=77?4:f>=75?3:f>=73?2:1))(forcaReal(c[0]))}</span></span></button>`).join('')}</div></div>`;
 }
 function barraClube(){
   const c=S.clubes[S.clube];const j=jogoDaRodada(S.rodada);
@@ -690,15 +872,39 @@ function statusJog(p){
   if(p.amarelos===2)return `<span class="chip warn">Pendurado</span>`+(tit?' <span class="chip good">Titular</span>':'');
   return tit?'<span class="chip good">Titular</span>':'';
 }
+function caracChips(p){return (p.car||[]).map(c=>CARAC[c]?`<span class="chip info" title="${CARAC[c][1]}">${CARAC[c][0]}</span>`:'').join(' ')}
+function fichaHTML(){
+  const p=S.jog[S.ui.ficha];if(!p)return '';
+  const ed=S.ui.editando;
+  const atr=Object.entries(p.at||{}).map(([k,v])=>`<div class="bar"><span>${ATR_NOME[k]}</span><div class="trk"><i style="width:${v}%;background:${v>=80?'var(--accent)':v>=65?'var(--good)':'var(--muted)'}"></i></div><span class="num">${v}</span></div>`).join('');
+  const clube=p.clube?S.clubes[p.clube].nome:'Sem clube';
+  const form=ed?`<div class="stack" style="border-top:1px solid var(--line);padding-top:12px">
+    <h3>Editar jogador</h3>
+    <div class="row">
+     <label class="fld" for="e-nome">Nome<input id="e-nome" type="text" value="${p.nome.replace(/"/g,'&quot;')}" maxlength="40"></label>
+     <label class="fld" for="e-pos">Posição<select id="e-pos">${POS.map(x=>`<option ${x===p.pos?'selected':''}>${x}</option>`).join('')}</select></label>
+     <label class="fld" for="e-idade">Idade<input id="e-idade" type="number" min="15" max="45" value="${p.idade}" style="width:80px"></label>
+     <label class="fld" for="e-ovr">Força<input id="e-ovr" type="number" min="35" max="93" value="${p.ovr}" style="width:80px"></label>
+    </div>
+    <div class="row">${Object.entries(CARAC).map(([k,v])=>`<label class="row" style="gap:4px;font-size:.88rem" for="e-c-${k}"><input type="checkbox" id="e-c-${k}" data-car="${k}" ${p.car.includes(k)?'checked':''}>${v[0]}</label>`).join('')}</div>
+    <div class="row"><button class="btn-good" data-a="salvarEdit">Salvar alterações</button><button data-a="cancelEdit">Cancelar</button></div></div>`:'';
+  return `<div class="panel stack"><div class="row" style="justify-content:space-between"><div class="row">${posTag(p.pos)}<h2>${p.nome}</h2><span class="muted">${p.idade} anos · ${clube}${p.real?'':' · jogador fictício'}</span></div><div class="row">${ed?'':'<button class="btn-sm" data-a="editar">Editar</button>'}<button class="btn-sm" data-a="fecharFicha">Fechar</button></div></div>
+   <div class="grid2"><div class="stack"><div>Força <b class="ovr" style="color:${corOvr(p.ovr)};font-size:1.3rem">${p.ovr}</b>${p.idade<=23?` <span class="muted">· potencial ${Math.max(p.ovr,p.pot-3)}–${Math.min(95,p.pot+3)}</span>`:''}</div>
+    <div>${caracChips(p)||'<span class="muted">Sem característica marcante</span>'}</div>
+    ${(p.car||[]).map(c=>CARAC[c]?`<div class="muted" style="font-size:.85rem">${CARAC[c][0]}: ${CARAC[c][1]}.</div>`:'').join('')}
+    <div class="muted" style="font-size:.85rem">Temporada: ${p.jogos} jogos · ${p.gols} gols · ${p.assist} assistências · valor ${money(valorJog(p))}</div></div>
+   <div class="bars">${atr}</div></div>${form}</div>`;
+}
 function abaElenco(){
   const el=S.clubes[S.clube].elenco.map(j=>S.jog[j]).sort((a,b)=>POS_ORD[a.pos]-POS_ORD[b.pos]||b.ovr-a.ovr);
   const v=S.ui.venda;
   const media=Math.round(forcaMedia(S.clube));
   return `<div class="stack">
+  ${fichaHTML()}
   ${v?`<div class="banner"><div><b>${S.clubes[v.compr].nome}</b> oferece <b class="num">${money(v.valor)}</b> por ${S.jog[v.pid].nome} (valor de mercado ${money(valorJog(S.jog[v.pid]))}).</div><div class="row"><button class="btn-good" data-a="aceitarVenda">Aceitar</button><button data-a="recusarVenda">Recusar</button></div></div>`:''}
   <div class="panel stack"><div class="row" style="justify-content:space-between"><h2>Elenco · ${el.length} jogadores</h2><span class="muted">Média dos 14 melhores: <b class="num" style="color:var(--fg)">${media}</b> · Folha: <b class="num" style="color:var(--fg)">${money(folhaMensal(S.clube))}/mês</b></span></div>
-  <div class="tbl-wrap"><table><thead><tr><th>Pos</th><th>Nome</th><th class="r">Idade</th><th class="r">Força</th><th class="r">Potencial</th><th>Condição</th><th>Moral</th><th class="r">J</th><th class="r">G</th><th class="r">A</th><th class="r">Salário</th><th class="r">Valor</th><th>Status</th><th></th></tr></thead><tbody>
-  ${el.map(p=>`<tr><td>${posTag(p.pos)}</td><td>${p.nome}</td><td class="r num">${p.idade}</td><td class="r ovr" style="color:${corOvr(p.ovr)}">${p.ovr}</td><td class="r num muted">${p.idade<=23?Math.max(p.ovr,p.pot-3)+'–'+Math.min(95,p.pot+3):'-'}</td><td>${meter(p.cond,corCond(p.cond))} <span class="num muted">${Math.round(p.cond)}</span></td><td>${meter(p.moral,p.moral>60?'var(--good)':p.moral>35?'var(--warn)':'var(--bad)')}</td><td class="r num">${p.jogos}</td><td class="r num">${p.gols}</td><td class="r num">${p.assist}</td><td class="r num">${money(p.salario)}</td><td class="r num">${money(valorJog(p))}</td><td>${statusJog(p)}</td><td><button class="btn-sm" data-a="vender" data-id="${p.id}">Vender</button></td></tr>`).join('')}
+  <div class="tbl-wrap"><table><thead><tr><th>Pos</th><th>Nome</th><th class="r">Idade</th><th class="r">Força</th><th>Características</th><th class="r">Potencial</th><th>Condição</th><th>Moral</th><th class="r">J</th><th class="r">G</th><th class="r">A</th><th class="r">Salário</th><th class="r">Valor</th><th>Status</th><th></th></tr></thead><tbody>
+  ${el.map(p=>`<tr><td>${posTag(p.pos)}</td><td><button class="lnk" data-a="ficha" data-id="${p.id}">${p.nome}</button>${p.base?' <span class="chip">base</span>':''}</td><td class="r num">${p.idade}</td><td class="r ovr" style="color:${corOvr(p.ovr)}">${p.ovr}</td><td>${caracChips(p)}</td><td class="r num muted">${p.idade<=23?Math.max(p.ovr,p.pot-3)+'–'+Math.min(95,p.pot+3):'-'}</td><td>${meter(p.cond,corCond(p.cond))} <span class="num muted">${Math.round(p.cond)}</span></td><td>${meter(p.moral,p.moral>60?'var(--good)':p.moral>35?'var(--warn)':'var(--bad)')}</td><td class="r num">${p.jogos}</td><td class="r num">${p.gols}</td><td class="r num">${p.assist}</td><td class="r num">${money(p.salario)}</td><td class="r num">${money(valorJog(p))}</td><td>${statusJog(p)}</td><td><button class="btn-sm" data-a="vender" data-id="${p.id}">Vender</button></td></tr>`).join('')}
   </tbody></table></div></div></div>`;
 }
 function pitchHTML(formacao,escal,selIdx,acao){
@@ -805,17 +1011,19 @@ function abaArtilharia(){
 function abaMercado(){
   const f=S.ui.mf||{pos:'',max:0,livres:false};
   let lst=f.livres?S.livres.map(j=>S.jog[j]):S.serieA.concat(S.serieB).filter(c=>c!==S.clube).flatMap(c=>S.clubes[c].elenco).map(j=>S.jog[j]);
-  lst=lst.filter(p=>p&&(!f.pos||p.pos===f.pos)&&(!f.max||precoPedido(p)<=f.max)).sort((a,b)=>b.ovr-a.ovr).slice(0,60);
+  const busca=(f.q||'').trim().toLowerCase();
+  lst=lst.filter(p=>p&&(!f.pos||p.pos===f.pos)&&(!f.max||precoPedido(p)<=f.max)&&(!busca||p.nome.toLowerCase().includes(busca))).sort((a,b)=>b.ovr-a.ovr).slice(0,60);
   const feitas=S.ui.ofertas||{};
-  return `<div class="panel stack"><div class="row" style="justify-content:space-between"><h2>Mercado</h2><span class="muted">Caixa: <b class="num" style="color:var(--fg)">${money(S.fin.caixa)}</b></span></div>
+  return `${fichaHTML()}<div class="panel stack"><div class="row" style="justify-content:space-between"><h2>Mercado</h2><span class="muted">Caixa: <b class="num" style="color:var(--fg)">${money(S.fin.caixa)}</b></span></div>
   <div class="row">
+   <label class="fld" for="m-q">Buscar nome<input id="m-q" type="search" data-c="mfQ" value="${(f.q||'').replace(/"/g,'&quot;')}" placeholder="Ex.: Arrascaeta"></label>
    <label class="fld" for="m-pos">Posição<select id="m-pos" data-c="mfPos"><option value="">Todas</option>${POS.map(p=>`<option ${f.pos===p?'selected':''}>${p}</option>`).join('')}</select></label>
    <label class="fld" for="m-max">Preço até<select id="m-max" data-c="mfMax">${[[0,'Qualquer'],[2000,'R$ 2 mi'],[5000,'R$ 5 mi'],[10000,'R$ 10 mi'],[20000,'R$ 20 mi'],[40000,'R$ 40 mi']].map(x=>`<option value="${x[0]}" ${f.max==x[0]?'selected':''}>${x[1]}</option>`).join('')}</select></label>
    <label class="fld" for="m-liv">Origem<select id="m-liv" data-c="mfLiv"><option value="0" ${!f.livres?'selected':''}>Outros clubes</option><option value="1" ${f.livres?'selected':''}>Sem clube (só luvas)</option></select></label>
   </div>
   <p class="muted" style="font-size:.85rem;margin:0">Uma proposta por jogador a cada rodada. Oferecer 115% quase sempre fecha; 90% é aposta. Clube com elenco curto não vende.</p>
-  <div class="tbl-wrap"><table><thead><tr><th>Pos</th><th>Nome</th><th>Clube</th><th class="r">Idade</th><th class="r">Força</th><th class="r">Salário</th><th class="r">Pedida</th><th>Proposta</th></tr></thead><tbody>
-  ${lst.map(p=>{const ped=precoPedido(p);const ja=feitas[p.id]===S.rodada+'-'+S.ano;return `<tr><td>${posTag(p.pos)}</td><td>${p.nome}</td><td>${p.clube?`<span class="row" style="gap:6px;flex-wrap:nowrap">${badge(p.clube,1)}<span class="muted">${S.clubes[p.clube].sigla}</span></span>`:'<span class="chip">Livre</span>'}</td><td class="r num">${p.idade}</td><td class="r ovr" style="color:${corOvr(p.ovr)}">${p.ovr}</td><td class="r num">${money(p.salario)}</td><td class="r num">${money(ped)}</td><td>${ja?'<span class="chip">Aguarde a próxima rodada</span>':`<span class="row" style="gap:4px;flex-wrap:nowrap">${[0.9,1,1.15].map(x=>`<button class="btn-sm" data-a="oferta" data-id="${p.id}" data-p="${x}">${Math.round(x*100)}%</button>`).join('')}</span>`}</td></tr>`}).join('')}
+  <div class="tbl-wrap"><table><thead><tr><th>Pos</th><th>Nome</th><th>Clube</th><th class="r">Idade</th><th class="r">Força</th><th>Características</th><th class="r">Salário</th><th class="r">Pedida</th><th>Proposta</th></tr></thead><tbody>
+  ${lst.map(p=>{const ped=precoPedido(p);const ja=feitas[p.id]===S.rodada+'-'+S.ano;return `<tr><td>${posTag(p.pos)}</td><td><button class="lnk" data-a="ficha" data-id="${p.id}">${p.nome}</button></td><td>${p.clube?`<span class="row" style="gap:6px;flex-wrap:nowrap">${badge(p.clube,1)}<span class="muted">${S.clubes[p.clube].sigla}</span></span>`:'<span class="chip">Livre</span>'}</td><td class="r num">${p.idade}</td><td class="r ovr" style="color:${corOvr(p.ovr)}">${p.ovr}</td><td>${caracChips(p)}</td><td class="r num">${money(p.salario)}</td><td class="r num">${money(ped)}</td><td>${ja?'<span class="chip">Aguarde a próxima rodada</span>':`<span class="row" style="gap:4px;flex-wrap:nowrap">${[0.9,1,1.15].map(x=>`<button class="btn-sm" data-a="oferta" data-id="${p.id}" data-p="${x}">${Math.round(x*100)}%</button>`).join('')}</span>`}</td></tr>`}).join('')}
   </tbody></table></div></div>`;
 }
 function abaFinancas(){
@@ -979,6 +1187,17 @@ const ACT={
   colocar:d=>{const i=S.ui.slotSel;if(i==null)return;const k=S.tatica.escal.indexOf(d.id);if(k>=0)S.tatica.escal[k]=S.tatica.escal[i];S.tatica.escal[i]=d.id;S.ui.slotSel=null;salvar();render()},
   autoEsc:()=>{autoEscalar();salvar();render();toast('Melhor escalação para o '+S.tatica.formacao+'.')},
   vender:d=>pedirOfertaVenda(d.id),
+  ficha:d=>{S.ui.ficha=d.id;S.ui.editando=false;render();window.scrollTo({top:0,behavior:'smooth'})},
+  fecharFicha:()=>{S.ui.ficha=null;S.ui.editando=false;render()},
+  editar:()=>{S.ui.editando=true;render()},
+  cancelEdit:()=>{S.ui.editando=false;render()},
+  salvarEdit:()=>{const p=S.jog[S.ui.ficha];if(!p)return;
+    const nome=$('#e-nome').value.trim();if(nome)p.nome=nome;
+    p.pos=$('#e-pos').value;p.idade=clamp(+$('#e-idade').value||p.idade,15,45);p.ovr=clamp(+$('#e-ovr').value||p.ovr,35,93);
+    p.car=[...document.querySelectorAll('[data-car]')].filter(x=>x.checked).map(x=>x.dataset.car);
+    if(p.idade>23)p.pot=p.ovr;else p.pot=Math.max(p.pot,p.ovr);
+    gerarAtributos(p);p.salario=Math.max(p.salario,salarioJog(p));p.real=true;
+    S.ui.editando=false;salvar();render();toast('Jogador atualizado.')},
   aceitarVenda:()=>aceitarVenda(),
   recusarVenda:()=>{S.ui.venda=null;render()},
   oferta:d=>fazerOferta(d.id,+d.p),
@@ -1010,6 +1229,7 @@ const CHG={
   treino:v=>{S.treino=v;salvar();render()},
   mfPos:v=>{S.ui.mf={...(S.ui.mf||{}),pos:v};render()},
   mfMax:v=>{S.ui.mf={...(S.ui.mf||{}),max:+v};render()},
+  mfQ:v=>{S.ui.mf={...(S.ui.mf||{}),q:v};render();const el=$('#m-q');if(el){el.focus();el.setSelectionRange(v.length,v.length)}},
   mfLiv:v=>{S.ui.mf={...(S.ui.mf||{}),livres:v==='1'};render()},
 };
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const f=ACT[b.dataset.a];if(f)f(b.dataset,b)});
